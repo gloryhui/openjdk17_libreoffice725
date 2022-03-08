@@ -6,6 +6,7 @@ SHELL ["/bin/bash", "-c"]
 ENV TZ=Asia/Shanghai
 # Alibaba Cloud ubuntu Sources
 COPY ./sources.list /etc/apt/sources.list
+COPY ./simsun.ttc /root/simsun.ttc
 RUN apt-get update && apt-get install -y \
     wget \
     tzdata \
@@ -17,8 +18,9 @@ RUN apt-get update && apt-get install -y \
     locale-gen zh_CN && \
     locale-gen zh_CN.utf8 && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone \
-    fc-cache
+    echo $TZ > /etc/timezone && \
+    mv /root/simsun.ttc  /usr/share/fonts/simsun.ttc && \
+    fc-cache -fv
 # Download OpenJDK17 and unzip to /opt/openjdk17
 RUN mkdir -p /opt/openjdk17 && wget -c https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz -O - | tar -zxP -C /opt/openjdk17 --strip-components=1
 # my local file path.please replace this.
